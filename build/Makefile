@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/guagua/Desktop/work/EVM
+CMAKE_SOURCE_DIR = /home/guagua/Desktop/work/test/EVM
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/guagua/Desktop/work/EVM/build
+CMAKE_BINARY_DIR = /home/guagua/Desktop/work/test/EVM/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles /home/guagua/Desktop/work/EVM/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/test/EVM/build/CMakeFiles /home/guagua/Desktop/work/test/EVM/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/test/EVM/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,56 +117,198 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named net
+# Target rules for targets named monitor
 
 # Build rule for target.
-net: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 net
-.PHONY : net
+monitor: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 monitor
+.PHONY : monitor
 
 # fast build rule for target.
-net/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/net.dir/build.make src/CMakeFiles/net.dir/build
-.PHONY : net/fast
+monitor/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/build
+.PHONY : monitor/fast
 
 #=============================================================================
-# Target rules for targets named service
+# Target rules for targets named device_simulator
 
 # Build rule for target.
-service: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 service
-.PHONY : service
+device_simulator: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 device_simulator
+.PHONY : device_simulator
 
 # fast build rule for target.
-service/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/service.dir/build.make src/CMakeFiles/service.dir/build
-.PHONY : service/fast
+device_simulator/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/build
+.PHONY : device_simulator/fast
 
-#=============================================================================
-# Target rules for targets named main
+src/database/database.o: src/database/database.cpp.o
+.PHONY : src/database/database.o
 
-# Build rule for target.
-main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main
-.PHONY : main
+# target to build an object file
+src/database/database.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/database/database.cpp.o
+.PHONY : src/database/database.cpp.o
 
-# fast build rule for target.
-main/fast:
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/main.dir/build.make example/CMakeFiles/main.dir/build
-.PHONY : main/fast
+src/database/database.i: src/database/database.cpp.i
+.PHONY : src/database/database.i
 
-#=============================================================================
-# Target rules for targets named client
+# target to preprocess a source file
+src/database/database.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/database/database.cpp.i
+.PHONY : src/database/database.cpp.i
 
-# Build rule for target.
-client: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client
-.PHONY : client
+src/database/database.s: src/database/database.cpp.s
+.PHONY : src/database/database.s
 
-# fast build rule for target.
-client/fast:
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/client.dir/build.make example/CMakeFiles/client.dir/build
-.PHONY : client/fast
+# target to generate assembly for a file
+src/database/database.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/database/database.cpp.s
+.PHONY : src/database/database.cpp.s
+
+src/device/device_manager.o: src/device/device_manager.cpp.o
+.PHONY : src/device/device_manager.o
+
+# target to build an object file
+src/device/device_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/device/device_manager.cpp.o
+.PHONY : src/device/device_manager.cpp.o
+
+src/device/device_manager.i: src/device/device_manager.cpp.i
+.PHONY : src/device/device_manager.i
+
+# target to preprocess a source file
+src/device/device_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/device/device_manager.cpp.i
+.PHONY : src/device/device_manager.cpp.i
+
+src/device/device_manager.s: src/device/device_manager.cpp.s
+.PHONY : src/device/device_manager.s
+
+# target to generate assembly for a file
+src/device/device_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/device/device_manager.cpp.s
+.PHONY : src/device/device_manager.cpp.s
+
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/network/http_server.o: src/network/http_server.cpp.o
+.PHONY : src/network/http_server.o
+
+# target to build an object file
+src/network/http_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/network/http_server.cpp.o
+.PHONY : src/network/http_server.cpp.o
+
+src/network/http_server.i: src/network/http_server.cpp.i
+.PHONY : src/network/http_server.i
+
+# target to preprocess a source file
+src/network/http_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/network/http_server.cpp.i
+.PHONY : src/network/http_server.cpp.i
+
+src/network/http_server.s: src/network/http_server.cpp.s
+.PHONY : src/network/http_server.s
+
+# target to generate assembly for a file
+src/network/http_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/network/http_server.cpp.s
+.PHONY : src/network/http_server.cpp.s
+
+src/network/tcp_server.o: src/network/tcp_server.cpp.o
+.PHONY : src/network/tcp_server.o
+
+# target to build an object file
+src/network/tcp_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/network/tcp_server.cpp.o
+.PHONY : src/network/tcp_server.cpp.o
+
+src/network/tcp_server.i: src/network/tcp_server.cpp.i
+.PHONY : src/network/tcp_server.i
+
+# target to preprocess a source file
+src/network/tcp_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/network/tcp_server.cpp.i
+.PHONY : src/network/tcp_server.cpp.i
+
+src/network/tcp_server.s: src/network/tcp_server.cpp.s
+.PHONY : src/network/tcp_server.s
+
+# target to generate assembly for a file
+src/network/tcp_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/network/tcp_server.cpp.s
+.PHONY : src/network/tcp_server.cpp.s
+
+src/scoring/environment_scorer.o: src/scoring/environment_scorer.cpp.o
+.PHONY : src/scoring/environment_scorer.o
+
+# target to build an object file
+src/scoring/environment_scorer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.o
+.PHONY : src/scoring/environment_scorer.cpp.o
+
+src/scoring/environment_scorer.i: src/scoring/environment_scorer.cpp.i
+.PHONY : src/scoring/environment_scorer.i
+
+# target to preprocess a source file
+src/scoring/environment_scorer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.i
+.PHONY : src/scoring/environment_scorer.cpp.i
+
+src/scoring/environment_scorer.s: src/scoring/environment_scorer.cpp.s
+.PHONY : src/scoring/environment_scorer.s
+
+# target to generate assembly for a file
+src/scoring/environment_scorer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.s
+.PHONY : src/scoring/environment_scorer.cpp.s
+
+tools/device_simulator.o: tools/device_simulator.cpp.o
+.PHONY : tools/device_simulator.o
+
+# target to build an object file
+tools/device_simulator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/tools/device_simulator.cpp.o
+.PHONY : tools/device_simulator.cpp.o
+
+tools/device_simulator.i: tools/device_simulator.cpp.i
+.PHONY : tools/device_simulator.i
+
+# target to preprocess a source file
+tools/device_simulator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/tools/device_simulator.cpp.i
+.PHONY : tools/device_simulator.cpp.i
+
+tools/device_simulator.s: tools/device_simulator.cpp.s
+.PHONY : tools/device_simulator.s
+
+# target to generate assembly for a file
+tools/device_simulator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/tools/device_simulator.cpp.s
+.PHONY : tools/device_simulator.cpp.s
 
 # Help Target
 help:
@@ -176,10 +318,29 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... client"
-	@echo "... main"
-	@echo "... net"
-	@echo "... service"
+	@echo "... device_simulator"
+	@echo "... monitor"
+	@echo "... src/database/database.o"
+	@echo "... src/database/database.i"
+	@echo "... src/database/database.s"
+	@echo "... src/device/device_manager.o"
+	@echo "... src/device/device_manager.i"
+	@echo "... src/device/device_manager.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/network/http_server.o"
+	@echo "... src/network/http_server.i"
+	@echo "... src/network/http_server.s"
+	@echo "... src/network/tcp_server.o"
+	@echo "... src/network/tcp_server.i"
+	@echo "... src/network/tcp_server.s"
+	@echo "... src/scoring/environment_scorer.o"
+	@echo "... src/scoring/environment_scorer.i"
+	@echo "... src/scoring/environment_scorer.s"
+	@echo "... tools/device_simulator.o"
+	@echo "... tools/device_simulator.i"
+	@echo "... tools/device_simulator.s"
 .PHONY : help
 
 

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libservice.a CMakeFiles/service.dir/service.cc.o CMakeFiles/service.dir/device.cc.o
-/usr/bin/ranlib libservice.a

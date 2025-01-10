@@ -54,167 +54,79 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/guagua/Desktop/work/EVM
+CMAKE_SOURCE_DIR = /home/guagua/Desktop/work/test/EVM
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/guagua/Desktop/work/EVM/build
+CMAKE_BINARY_DIR = /home/guagua/Desktop/work/test/EVM/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: src/all
-all: example/all
+all: CMakeFiles/monitor.dir/all
+all: CMakeFiles/device_simulator.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall: src/preinstall
-preinstall: example/preinstall
+preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: src/clean
-clean: example/clean
+clean: CMakeFiles/monitor.dir/clean
+clean: CMakeFiles/device_simulator.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory example
-
-# Recursive "all" directory target.
-example/all: example/CMakeFiles/main.dir/all
-example/all: example/CMakeFiles/client.dir/all
-.PHONY : example/all
-
-# Recursive "preinstall" directory target.
-example/preinstall:
-.PHONY : example/preinstall
-
-# Recursive "clean" directory target.
-example/clean: example/CMakeFiles/main.dir/clean
-example/clean: example/CMakeFiles/client.dir/clean
-.PHONY : example/clean
-
-#=============================================================================
-# Directory level rules for directory src
-
-# Recursive "all" directory target.
-src/all: src/CMakeFiles/net.dir/all
-src/all: src/CMakeFiles/service.dir/all
-.PHONY : src/all
-
-# Recursive "preinstall" directory target.
-src/preinstall:
-.PHONY : src/preinstall
-
-# Recursive "clean" directory target.
-src/clean: src/CMakeFiles/net.dir/clean
-src/clean: src/CMakeFiles/service.dir/clean
-.PHONY : src/clean
-
-#=============================================================================
-# Target rules for target src/CMakeFiles/net.dir
+# Target rules for target CMakeFiles/monitor.dir
 
 # All Build rule for target.
-src/CMakeFiles/net.dir/all:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/net.dir/build.make src/CMakeFiles/net.dir/depend
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/net.dir/build.make src/CMakeFiles/net.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/guagua/Desktop/work/EVM/build/CMakeFiles --progress-num=5,6 "Built target net"
-.PHONY : src/CMakeFiles/net.dir/all
+CMakeFiles/monitor.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/guagua/Desktop/work/test/EVM/build/CMakeFiles --progress-num=3,4,5,6,7,8,9 "Built target monitor"
+.PHONY : CMakeFiles/monitor.dir/all
 
 # Build rule for subdir invocation for target.
-src/CMakeFiles/net.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/net.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 0
-.PHONY : src/CMakeFiles/net.dir/rule
+CMakeFiles/monitor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/test/EVM/build/CMakeFiles 7
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/monitor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/test/EVM/build/CMakeFiles 0
+.PHONY : CMakeFiles/monitor.dir/rule
 
 # Convenience name for target.
-net: src/CMakeFiles/net.dir/rule
-.PHONY : net
+monitor: CMakeFiles/monitor.dir/rule
+.PHONY : monitor
 
 # clean rule for target.
-src/CMakeFiles/net.dir/clean:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/net.dir/build.make src/CMakeFiles/net.dir/clean
-.PHONY : src/CMakeFiles/net.dir/clean
+CMakeFiles/monitor.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/clean
+.PHONY : CMakeFiles/monitor.dir/clean
 
 #=============================================================================
-# Target rules for target src/CMakeFiles/service.dir
+# Target rules for target CMakeFiles/device_simulator.dir
 
 # All Build rule for target.
-src/CMakeFiles/service.dir/all:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/service.dir/build.make src/CMakeFiles/service.dir/depend
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/service.dir/build.make src/CMakeFiles/service.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/guagua/Desktop/work/EVM/build/CMakeFiles --progress-num=7,8,9 "Built target service"
-.PHONY : src/CMakeFiles/service.dir/all
+CMakeFiles/device_simulator.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/guagua/Desktop/work/test/EVM/build/CMakeFiles --progress-num=1,2 "Built target device_simulator"
+.PHONY : CMakeFiles/device_simulator.dir/all
 
 # Build rule for subdir invocation for target.
-src/CMakeFiles/service.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/service.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 0
-.PHONY : src/CMakeFiles/service.dir/rule
+CMakeFiles/device_simulator.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/test/EVM/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/device_simulator.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/test/EVM/build/CMakeFiles 0
+.PHONY : CMakeFiles/device_simulator.dir/rule
 
 # Convenience name for target.
-service: src/CMakeFiles/service.dir/rule
-.PHONY : service
+device_simulator: CMakeFiles/device_simulator.dir/rule
+.PHONY : device_simulator
 
 # clean rule for target.
-src/CMakeFiles/service.dir/clean:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/service.dir/build.make src/CMakeFiles/service.dir/clean
-.PHONY : src/CMakeFiles/service.dir/clean
-
-#=============================================================================
-# Target rules for target example/CMakeFiles/main.dir
-
-# All Build rule for target.
-example/CMakeFiles/main.dir/all: src/CMakeFiles/net.dir/all
-example/CMakeFiles/main.dir/all: src/CMakeFiles/service.dir/all
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/main.dir/build.make example/CMakeFiles/main.dir/depend
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/main.dir/build.make example/CMakeFiles/main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/guagua/Desktop/work/EVM/build/CMakeFiles --progress-num=3,4 "Built target main"
-.PHONY : example/CMakeFiles/main.dir/all
-
-# Build rule for subdir invocation for target.
-example/CMakeFiles/main.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 7
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example/CMakeFiles/main.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 0
-.PHONY : example/CMakeFiles/main.dir/rule
-
-# Convenience name for target.
-main: example/CMakeFiles/main.dir/rule
-.PHONY : main
-
-# clean rule for target.
-example/CMakeFiles/main.dir/clean:
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/main.dir/build.make example/CMakeFiles/main.dir/clean
-.PHONY : example/CMakeFiles/main.dir/clean
-
-#=============================================================================
-# Target rules for target example/CMakeFiles/client.dir
-
-# All Build rule for target.
-example/CMakeFiles/client.dir/all:
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/client.dir/build.make example/CMakeFiles/client.dir/depend
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/client.dir/build.make example/CMakeFiles/client.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/guagua/Desktop/work/EVM/build/CMakeFiles --progress-num=1,2 "Built target client"
-.PHONY : example/CMakeFiles/client.dir/all
-
-# Build rule for subdir invocation for target.
-example/CMakeFiles/client.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example/CMakeFiles/client.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/guagua/Desktop/work/EVM/build/CMakeFiles 0
-.PHONY : example/CMakeFiles/client.dir/rule
-
-# Convenience name for target.
-client: example/CMakeFiles/client.dir/rule
-.PHONY : client
-
-# clean rule for target.
-example/CMakeFiles/client.dir/clean:
-	$(MAKE) $(MAKESILENT) -f example/CMakeFiles/client.dir/build.make example/CMakeFiles/client.dir/clean
-.PHONY : example/CMakeFiles/client.dir/clean
+CMakeFiles/device_simulator.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/device_simulator.dir/build.make CMakeFiles/device_simulator.dir/clean
+.PHONY : CMakeFiles/device_simulator.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libnet.a CMakeFiles/net.dir/net.cc.o
-/usr/bin/ranlib libnet.a

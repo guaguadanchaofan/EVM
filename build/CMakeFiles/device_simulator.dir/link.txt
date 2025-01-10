@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -g -O0 -DDEBUG CMakeFiles/device_simulator.dir/tools/device_simulator.cpp.o -o ../bin/device_simulator  -lboost_system -ljsoncpp -lpthread 

@@ -1,10 +1,4 @@
-/home/guagua/Desktop/work/EVM/build/CMakeFiles/edit_cache.dir
-/home/guagua/Desktop/work/EVM/build/CMakeFiles/rebuild_cache.dir
-/home/guagua/Desktop/work/EVM/build/src/CMakeFiles/net.dir
-/home/guagua/Desktop/work/EVM/build/src/CMakeFiles/service.dir
-/home/guagua/Desktop/work/EVM/build/src/CMakeFiles/edit_cache.dir
-/home/guagua/Desktop/work/EVM/build/src/CMakeFiles/rebuild_cache.dir
-/home/guagua/Desktop/work/EVM/build/example/CMakeFiles/main.dir
-/home/guagua/Desktop/work/EVM/build/example/CMakeFiles/client.dir
-/home/guagua/Desktop/work/EVM/build/example/CMakeFiles/edit_cache.dir
-/home/guagua/Desktop/work/EVM/build/example/CMakeFiles/rebuild_cache.dir
+/home/guagua/Desktop/work/test/EVM/build/CMakeFiles/monitor.dir
+/home/guagua/Desktop/work/test/EVM/build/CMakeFiles/device_simulator.dir
+/home/guagua/Desktop/work/test/EVM/build/CMakeFiles/edit_cache.dir
+/home/guagua/Desktop/work/test/EVM/build/CMakeFiles/rebuild_cache.dir
