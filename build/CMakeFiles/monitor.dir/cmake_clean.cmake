@@ -13,6 +13,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/monitor.dir/src/network/tcp_server.cpp.o.d"
   "CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.o"
   "CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.o.d"
+  "CMakeFiles/monitor.dir/src/services/environment_service.cpp.o"
+  "CMakeFiles/monitor.dir/src/services/environment_service.cpp.o.d"
+  "CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o"
+  "CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

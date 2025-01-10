@@ -153,6 +153,34 @@ CMakeFiles/monitor.dir/src/device/device_manager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monitor.dir/src/device/device_manager.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/guagua/Desktop/work/test/EVM/src/device/device_manager.cpp -o CMakeFiles/monitor.dir/src/device/device_manager.cpp.s
 
+CMakeFiles/monitor.dir/src/services/environment_service.cpp.o: CMakeFiles/monitor.dir/flags.make
+CMakeFiles/monitor.dir/src/services/environment_service.cpp.o: ../src/services/environment_service.cpp
+CMakeFiles/monitor.dir/src/services/environment_service.cpp.o: CMakeFiles/monitor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guagua/Desktop/work/test/EVM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/monitor.dir/src/services/environment_service.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/monitor.dir/src/services/environment_service.cpp.o -MF CMakeFiles/monitor.dir/src/services/environment_service.cpp.o.d -o CMakeFiles/monitor.dir/src/services/environment_service.cpp.o -c /home/guagua/Desktop/work/test/EVM/src/services/environment_service.cpp
+
+CMakeFiles/monitor.dir/src/services/environment_service.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/monitor.dir/src/services/environment_service.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/guagua/Desktop/work/test/EVM/src/services/environment_service.cpp > CMakeFiles/monitor.dir/src/services/environment_service.cpp.i
+
+CMakeFiles/monitor.dir/src/services/environment_service.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monitor.dir/src/services/environment_service.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/guagua/Desktop/work/test/EVM/src/services/environment_service.cpp -o CMakeFiles/monitor.dir/src/services/environment_service.cpp.s
+
+CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o: CMakeFiles/monitor.dir/flags.make
+CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o: ../src/tasks/data_maintenance.cpp
+CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o: CMakeFiles/monitor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/guagua/Desktop/work/test/EVM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o -MF CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o.d -o CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o -c /home/guagua/Desktop/work/test/EVM/src/tasks/data_maintenance.cpp
+
+CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/guagua/Desktop/work/test/EVM/src/tasks/data_maintenance.cpp > CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.i
+
+CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/guagua/Desktop/work/test/EVM/src/tasks/data_maintenance.cpp -o CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.s
+
 # Object files for target monitor
 monitor_OBJECTS = \
 "CMakeFiles/monitor.dir/src/main.cpp.o" \
@@ -160,7 +188,9 @@ monitor_OBJECTS = \
 "CMakeFiles/monitor.dir/src/network/tcp_server.cpp.o" \
 "CMakeFiles/monitor.dir/src/database/database.cpp.o" \
 "CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.o" \
-"CMakeFiles/monitor.dir/src/device/device_manager.cpp.o"
+"CMakeFiles/monitor.dir/src/device/device_manager.cpp.o" \
+"CMakeFiles/monitor.dir/src/services/environment_service.cpp.o" \
+"CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o"
 
 # External object files for target monitor
 monitor_EXTERNAL_OBJECTS =
@@ -171,9 +201,11 @@ monitor_EXTERNAL_OBJECTS =
 ../bin/monitor: CMakeFiles/monitor.dir/src/database/database.cpp.o
 ../bin/monitor: CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.o
 ../bin/monitor: CMakeFiles/monitor.dir/src/device/device_manager.cpp.o
+../bin/monitor: CMakeFiles/monitor.dir/src/services/environment_service.cpp.o
+../bin/monitor: CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o
 ../bin/monitor: CMakeFiles/monitor.dir/build.make
 ../bin/monitor: CMakeFiles/monitor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/guagua/Desktop/work/test/EVM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ../bin/monitor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/guagua/Desktop/work/test/EVM/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable ../bin/monitor"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/monitor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

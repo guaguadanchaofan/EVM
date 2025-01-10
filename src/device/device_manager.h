@@ -4,6 +4,7 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <deque>
 #include "../models/sensor_data.h"
 
 // 设备状态
@@ -23,7 +24,7 @@ struct DeviceInfo {
     time_t last_heartbeat;
     time_t last_seen;
     time_t register_time;
-    std::vector<SensorData> recent_data;  // 最近的数据缓存
+    std::deque<SensorData> recent_data;  // 最近的数据缓存
     
     // 设备配置
     struct Config {

@@ -1,123 +1,138 @@
 #include <boost/asio.hpp>
 #include <jsoncpp/json/json.h>
 #include <iostream>
-#include <random>
-#include <chrono>
 #include <thread>
+#include <chrono>
+#include <random>
+#include "../src/models/sensor_data.h"
 
 using boost::asio::ip::tcp;
 
-class DeviceSimulator {
-public:
-    DeviceSimulator(const std::string& device_id, 
-                   const std::string& host = "127.0.0.1", 
-                   int port = 8888)
-        : device_id_(device_id)
-        , host_(host)
-        , port_(port)
-        , io_context_()
-        , socket_(io_context_)
-    {
-        // 初始化随机数生成器
-        std::random_device rd;
-        gen_ = std::mt19937(rd());
-        
-        // 设置各项指标的正态分布范围
-        temp_dist_ = std::normal_distribution<>(23.0, 2.0);    // 温度范围约19-27℃
-        hum_dist_ = std::normal_distribution<>(55.0, 10.0);    // 湿度范围约35-75%
-        co2_dist_ = std::normal_distribution<>(800.0, 200.0);  // CO2范围约400-1200ppm
-        pm25_dist_ = std::normal_distribution<>(50.0, 15.0);   // PM2.5范围约20-80μg/m³
+double generateRandomValue(double min, double max) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<> dis(0.0, 1.0);
+    
+    // 增加随机波动
+    static double last_value = (min + max) / 2;
+    double variation = (max - min) * 0.7;  // 允许70%的波动范围
+    double new_value = last_value + variation * (dis(gen) * 2 - 1);
+    
+    // 有20%的概率产生极端值
+    if (dis(gen) < 0.2) {
+        new_value = dis(gen) < 0.5 ? min : max;
     }
     
-    void connect() {
+    // 确保值在范围内
+    new_value = std::max(min, std::min(max, new_value));
+    last_value = new_value;
+    return new_value;
+}
+
+bool connectToServer(tcp::socket& socket, boost::asio::io_context& io_context) {
+    try {
+        socket.connect(tcp::endpoint(
+            boost::asio::ip::address::from_string("127.0.0.1"), 8888));
+        std::cout << "Connected to server successfully" << std::endl;
+        return true;
+    } catch (const std::exception& e) {
+        std::cerr << "Connection failed: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+void simulateDevice(const std::string& device_id, const std::string& area, AreaType area_type) {
+    while (true) {  // 外层循环，确保设备永远运行
         try {
-            std::cout << "Attempting to connect to " << host_ << ":" << port_ << std::endl;
-            tcp::resolver resolver(io_context_);
-            auto endpoints = resolver.resolve(host_, std::to_string(port_));
-            boost::asio::connect(socket_, endpoints);
-            std::cout << "Connected to server successfully" << std::endl;
-        } catch (const std::exception& e) {
-            std::cerr << "Connection failed: " << e.what() << std::endl;
-            throw;
-        }
-    }
-    
-    void start(int interval_seconds = 5) {
-        while (true) {
-            try {
-                sendData();
-                std::cout << "Data sent successfully" << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "Failed to send data: " << e.what() << std::endl;
+            boost::asio::io_context io_context;
+            tcp::socket socket(io_context);
+            
+            // 尝试连接服务器，失败后等待5秒重试
+            while (!connectToServer(socket, io_context)) {
+                std::cerr << "Retrying in 5 seconds..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(5));
+                socket.close();
+                socket = tcp::socket(io_context);
+            }
+            
+            // 连接成功后的数据发送循环
+            while (true) {
                 try {
-                    connect(); // 尝试重新连接
-                } catch (...) {
-                    std::cerr << "Reconnection failed, waiting..." << std::endl;
+                    // 生成模拟数据
+                    Json::Value root;
+                    root["device_id"] = device_id;
+                    root["timestamp"] = static_cast<Json::Int64>(time(nullptr));
+                    
+                    // 四季通用的极端数据范围
+                    root["temperature"] = generateRandomValue(-20, 40);
+                    root["humidity"] = generateRandomValue(10, 95);
+                    root["co2"] = generateRandomValue(350, 5000);
+                    root["pm25"] = generateRandomValue(0, 500);
+                    root["noise"] = generateRandomValue(20, 120);
+                    root["light"] = generateRandomValue(0, 100000);
+                    
+                    root["area"] = area;
+                    root["area_type"] = area_type == AreaType::LIVING ? "living" :
+                                      area_type == AreaType::TEACHING ? "teaching" : "recreation";
+                    
+                    // 转换为字符串
+                    Json::FastWriter writer;
+                    std::string json_str = writer.write(root);
+                    
+                    // 发送数据
+                    boost::asio::write(socket, boost::asio::buffer(json_str));
+                    std::cout << "Sent data: " << json_str;
+                    
+                    // 接收响应
+                    std::vector<char> response(1024);
+                    size_t len = socket.read_some(boost::asio::buffer(response));
+                    if (len > 0) {
+                        std::cout << "Data sent successfully" << std::endl;
+                    }
+                    
+                    // 固定5秒发送一次
+                    std::this_thread::sleep_for(std::chrono::seconds(5));
+                    
+                } catch (const std::exception& e) {
+                    std::cerr << "Error during data transmission: " << e.what() << std::endl;
+                    std::cerr << "Connection lost, attempting to reconnect..." << std::endl;
+                    break;  // 跳出内层循环，重新连接
                 }
             }
             
-            std::this_thread::sleep_for(std::chrono::seconds(interval_seconds));
+        } catch (const std::exception& e) {
+            std::cerr << "Fatal error: " << e.what() << std::endl;
+            std::cerr << "Restarting device simulation..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(5));
         }
     }
-    
-private:
-    void sendData() {
-        // 生成模拟数据
-        double temperature = std::max(15.0, std::min(30.0, temp_dist_(gen_)));
-        double humidity = std::max(30.0, std::min(80.0, hum_dist_(gen_)));
-        double co2 = std::max(400.0, std::min(2000.0, co2_dist_(gen_)));
-        double pm25 = std::max(0.0, std::min(150.0, pm25_dist_(gen_)));
-        
-        // 构建JSON数据
-        Json::Value data;
-        data["device_id"] = device_id_;
-        data["timestamp"] = std::time(nullptr);
-        data["temperature"] = temperature;
-        data["humidity"] = humidity;
-        data["co2"] = co2;
-        data["pm25"] = pm25;
-        
-        Json::FastWriter writer;
-        std::string json_str = writer.write(data);
-        
-        // 发送数据
-        boost::asio::write(socket_, boost::asio::buffer(json_str));
-        
-        // 打印发送的数据
-        std::cout << "Sent data: " << json_str;
-    }
-    
-    std::string device_id_;
-    std::string host_;
-    int port_;
-    boost::asio::io_context io_context_;
-    tcp::socket socket_;
-    
-    std::mt19937 gen_;
-    std::normal_distribution<> temp_dist_;
-    std::normal_distribution<> hum_dist_;
-    std::normal_distribution<> co2_dist_;
-    std::normal_distribution<> pm25_dist_;
-};
+}
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <device_id> [host] [port]" << std::endl;
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " <device_id> <area> <area_type>\n";
+        std::cerr << "Area type: living, teaching, recreation\n";
         return 1;
     }
     
     std::string device_id = argv[1];
-    std::string host = argc > 2 ? argv[2] : "127.0.0.1";
-    int port = argc > 3 ? std::stoi(argv[3]) : 8888;
+    std::string area = argv[2];
+    std::string area_type_str = argv[3];
+    AreaType area_type;
     
-    try {
-        DeviceSimulator simulator(device_id, host, port);
-        simulator.connect();
-        simulator.start();
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    // 将字符串转换为 AreaType
+    if (area_type_str == "living") {
+        area_type = AreaType::LIVING;
+    } else if (area_type_str == "teaching") {
+        area_type = AreaType::TEACHING;
+    } else if (area_type_str == "recreation") {
+        area_type = AreaType::RECREATION;
+    } else {
+        std::cerr << "Invalid area type. Must be one of: living, teaching, recreation\n";
         return 1;
     }
+    
+    simulateDevice(device_id, area, area_type);
     
     return 0;
 } 

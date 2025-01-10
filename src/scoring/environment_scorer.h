@@ -2,6 +2,7 @@
 #include "../models/sensor_data.h"
 #include <map>
 #include <string>
+#include <vector>
 
 class EnvironmentScorer {
 public:
@@ -16,11 +17,11 @@ public:
 
     // 时段类型
     enum class TimeSlot {
-        MORNING_CLASS,     // 上午课程
-        AFTERNOON_CLASS,   // 下午课程
-        EVENING_CLASS,     // 晚自习
-        REST_TIME,         // 休息时间
-        SLEEPING_TIME      // 睡眠时间
+        MORNING_CLASS,    // 8:00-12:00
+        AFTERNOON_CLASS,  // 14:00-18:00
+        EVENING_CLASS,    // 19:00-22:00
+        SLEEPING_TIME,    // 22:00-6:00
+        REST_TIME         // 其他时间
     };
 
     EnvironmentScorer(SceneType scene = SceneType::CLASSROOM);
@@ -37,16 +38,30 @@ public:
     static double evaluateCO2(double co2);
     static double evaluatePM25(double pm25);
     
-private:
-    // 单项指标评分计算
-    double calculateTemperatureScore(double temperature);
-    double calculateHumidityScore(double humidity);
-    double calculateCO2Score(double co2);
-    double calculatePM25Score(double pm25);
+    static double calculateTemperatureScore(double temperature, AreaType area_type);
+    static double calculateHumidityScore(double humidity);
+    static double calculateCO2Score(double co2);
+    static double calculatePM25Score(double pm25);
+    static double calculateNoiseScore(double noise, AreaType area_type);
+    static double calculateLightScore(double light, AreaType area_type);
     
+    std::string getTemperatureStatus(double temp, AreaType type);
+    std::string getHumidityStatus(double humidity);
+    std::string getCO2Status(double co2);
+    std::string getPM25Status(double pm25);
+    std::string getNoiseStatus(double noise, AreaType type);
+    std::string getLightStatus(double light, AreaType type);
+    
+    std::vector<std::string> generateSuggestions(const SensorData& data, TimeSlot time_slot);
+    
+private:
     // 获取权重
     std::map<std::string, double> getWeights(TimeSlot timeSlot) const;
     
     SceneType scene_;
     std::map<std::string, double> factorScores_;
+    
+    // 辅助函数
+    bool isWorkingHours(TimeSlot time_slot);
+    bool isSleepingHours(TimeSlot time_slot);
 }; 

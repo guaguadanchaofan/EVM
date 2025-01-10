@@ -1,6 +1,7 @@
 #include "device_manager.h"
 #include <algorithm>
 #include <ctime>
+#include <iostream>
 
 bool DeviceManager::registerDevice(const std::string& device_id,
                                  const std::string& location_id,
@@ -91,14 +92,23 @@ std::vector<std::shared_ptr<DeviceInfo>> DeviceManager::getDevicesByLocation(
 
 void DeviceManager::checkDevicesStatus() {
     std::lock_guard<std::mutex> lock(mutex_);
+    time_t now = std::time(nullptr);
     
-    auto now = std::time(nullptr);
-    for (auto& [_, device] : devices_) {
-        if (device->status != DeviceStatus::MAINTENANCE &&
-            device->status != DeviceStatus::FAULT) {
-            // 如果超过3个心跳间隔没有更新，则认为设备离线
-            if (now - device->last_heartbeat > device->config.heartbeat_interval * 3) {
-                device->status = DeviceStatus::OFFLINE;
+    for (auto& device : devices_) {
+        // 如果超过10秒没有收到心跳，则将设备设置为离线
+        if (now - device.second->last_heartbeat > 10) {
+            if (device.second->status != DeviceStatus::OFFLINE) {
+                std::cout << "[DeviceManager] Device " << device.first 
+                         << " is offline (no heartbeat for " 
+                         << (now - device.second->last_heartbeat) 
+                         << " seconds)" << std::endl;
+                device.second->status = DeviceStatus::OFFLINE;
+            }
+        } else {
+            if (device.second->status != DeviceStatus::ONLINE) {
+                std::cout << "[DeviceManager] Device " << device.first 
+                         << " is online" << std::endl;
+                device.second->status = DeviceStatus::ONLINE;
             }
         }
     }

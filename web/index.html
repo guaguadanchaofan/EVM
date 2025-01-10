@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>环境监控系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            padding: 10px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            margin: 0 0 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .data-section {
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .data-section h3 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 14px;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 4px 0;
+            font-size: 14px;
+        }
+        .data-label {
+            color: #666;
+        }
+        .data-value {
+            font-weight: 500;
+        }
+        .chart-container {
+            height: 300px;
+            margin-top: 10px;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .score {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 5px 0;
+            color: #1890ff;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status-online { background: #52c41a; color: white; }
+        .status-offline { background: #ff4d4f; color: white; }
+        .score-details {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        .score-details p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 4px 0;
+            padding: 2px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .status-text {
+            color: #666;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+        .score-value {
+            display: flex;
+            align-items: center;
+        }
+        .suggestions {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e6f7ff;
+            border-radius: 6px;
+            border: 1px solid #91d5ff;
+        }
+        .suggestions h3 {
+            color: #0050b3;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+        }
+        .suggestion-item {
+            color: #333;
+            font-size: 13px;
+            margin: 4px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        .suggestion-item:before {
+            content: "•";
+            color: #1890ff;
+            margin-right: 8px;
+        }
+        .area-type {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+            color: white;
+        }
+        .area-type.living { background: #52c41a; }      /* 生活区-绿色 */
+        .area-type.teaching { background: #1890ff; }    /* 教学区-蓝色 */
+        .area-type.recreation { background: #722ed1; }  /* 娱乐区-紫色 */
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 10px;
+        }
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: white;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 5px 0;
+            color: #1f1f1f;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .metric-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+        .status-good { background: #f6ffed; color: #52c41a; }
+        .status-warning { background: #fffbe6; color: #faad14; }
+        .status-bad { background: #fff2f0; color: #ff4d4f; }
+        .metric-score {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #1890ff, #52c41a);
+        }
+        .score-bad {
+            background: linear-gradient(45deg, #ff4d4f, #ff7a45);
+        }
+        .score-warning {
+            background: linear-gradient(45deg, #faad14, #ffa940);
+        }
+        .score-good {
+            background: linear-gradient(45deg, #52c41a, #73d13d);
+        }
+        .layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .device-list {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .device-item {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .device-item:hover {
+            background-color: #f0f2f5;
+        }
+        
+        .device-item.active {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+        }
+        
+        .history-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .history-button:hover {
+            background: #40a9ff;
+        }
+        
+        .history-button.active {
+            background: #096dd9;
+        }
+        
+        .history-chart {
+            height: 400px;
+            margin-top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .history-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;  /* 默认隐藏 */
+        }
+        
+        .history-section.visible {
+            display: block;
+        }
+        
+        .history-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .date-picker {
+            padding: 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            width: 200px;
+        }
+        
+        .quick-select {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .quick-select button {
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quick-select button:hover {
+            border-color: #40a9ff;
+            color: #40a9ff;
+        }
+        
+        .quick-select button.active {
+            background: #1890ff;
+            border-color: #1890ff;
+            color: white;
+        }
+        
+        .history-toggle {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        
+        .history-toggle:hover {
+            background: #40a9ff;
+        }
+        
+        .history-toggle.active {
+            background: #096dd9;
+        }
+        .overall-score {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .score-label {
+            margin-top: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+        .overall-score {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .score-label {
+            margin-top: 8px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>环境监控系统</h1>
+        <div id="status"></div>
+        <div class="layout">
+            <div class="device-list">
+                <h2>设备列表</h2>
+                <div id="deviceList"></div>
+            </div>
+            <div class="device-detail">
+                <div id="deviceDetail"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        function createDeviceCard(device) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const status = device.device_status === 1 ? 'online' : 'offline';
+            const statusText = status === 'online' ? '在线' : '离线';
+            
+            const overallScore = `
+                <div class="overall-score">
+                    <div class="score-circle" style="background: ${getScoreColor(device.scores.overall)}">
+                        ${Math.round(device.scores.overall)}
+                    </div>
+                    <div class="score-label">综合评分</div>
+                </div>
+            `;
+            
+            const dataSection = `
+                <div class="data-section">
+                    <h3>实时数据</h3>
+                    ${overallScore}
+                    <div class="metrics-container">
+                        <div class="metric-card">
+                            <div class="metric-score ${getScoreClass(device.scores.temperature)}"
+                                data-metric="temperature"
+                            >
+                                ${Math.round(device.scores.temperature)}
+                            </div>
+                            <div class="metric-icon" style="background: #ff4d4f">🌡️</div>
+                            <div class="metric-label">温度</div>
+                            <div class="metric-value"
+                                data-metric="temperature"
+                            >${device.temperature.toFixed(1)}°C</div>
+                            <div class="metric-status"
+                                data-metric="temperature"
+                            >
+                                ${device.status.temperature}
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-score ${getScoreClass(device.scores.humidity)}">
+                                ${Math.round(device.scores.humidity)}
+                            </div>
+                            <div class="metric-icon" style="background: #1890ff">💧</div>
+                            <div class="metric-label">湿度</div>
+                            <div class="metric-value">${device.humidity.toFixed(0)}%</div>
+                            <div class="metric-status">
+                                ${device.status.humidity}
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-score ${getScoreClass(device.scores.co2)}">
+                                ${Math.round(device.scores.co2)}
+                            </div>
+                            <div class="metric-icon" style="background: #52c41a">🌬️</div>
+                            <div class="metric-label">CO2</div>
+                            <div class="metric-value">${device.co2.toFixed(0)} ppm</div>
+                            <div class="metric-status">
+                                ${device.status.co2}
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-score ${getScoreClass(device.scores.pm25)}">
+                                ${Math.round(device.scores.pm25)}
+                            </div>
+                            <div class="metric-icon" style="background: #722ed1">🌫️</div>
+                            <div class="metric-label">PM2.5</div>
+                            <div class="metric-value">${device.pm25.toFixed(1)} μg/m³</div>
+                            <div class="metric-status">
+                                ${device.status.pm25}
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-score ${getScoreClass(device.scores.noise)}">
+                                ${Math.round(device.scores.noise)}
+                            </div>
+                            <div class="metric-icon" style="background: #faad14">🔊</div>
+                            <div class="metric-label">噪音</div>
+                            <div class="metric-value">${device.noise.toFixed(0)} dB</div>
+                            <div class="metric-status">
+                                ${device.status.noise}
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-score ${getScoreClass(device.scores.light)}">
+                                ${Math.round(device.scores.light)}
+                            </div>
+                            <div class="metric-icon" style="background: #fa8c16">☀️</div>
+                            <div class="metric-label">光照</div>
+                            <div class="metric-value">${device.light.toFixed(0)} lux</div>
+                            <div class="metric-status">
+                                ${device.status.light}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            card.innerHTML = `
+                <h2>
+                    设备 ${device.device_id}
+                    <span class="status status-${status}">${statusText}</span>
+                </h2>
+                <h3>
+                    区域: ${device.area}
+                    <span class="area-type ${getAreaTypeClass(device.area_type)}">${getAreaTypeText(device.area_type)}</span>
+                </h3>
+                <div class="device-grid">
+                    ${dataSection}
+                </div>
+                <div class="suggestions">
+                    <h3>环境建议</h3>
+                    ${device.suggestions.map(suggestion => 
+                        `<div class="suggestion-item">${suggestion}</div>`
+                    ).join('')}
+                </div>
+                <button class="history-toggle" onclick="toggleHistory('${device.device_id}')">
+                    查看历史数据
+                </button>
+                <div id="history_section_${device.device_id}" class="history-section">
+                    <div class="history-controls">
+                        <div class="history-buttons">
+                            <button class="history-btn" onclick="loadHistoryData('${device.device_id}', 'realtime')">实时数据（24小时）</button>
+                            <button class="history-btn" onclick="loadHistoryData('${device.device_id}', 'hourly')">小时聚合（7天）</button>
+                            <button class="history-btn" onclick="loadHistoryData('${device.device_id}', 'daily')">每日聚合（30天）</button>
+                        </div>
+                    </div>
+                    <div id="history_${device.device_id}" class="chart-container"></div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function initChart(deviceId, data) {
+            const chart = echarts.init(document.getElementById(`chart_${deviceId}`));
+            const option = {
+                title: {
+                    text: '实时数据趋势',
+                    left: 'center',
+                    top: '10px'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params) {
+                        let result = new Date(params[0].value[0]).toLocaleTimeString() + '<br/>';
+                        params.forEach(param => {
+                            result += `${param.seriesName}: ${param.value[1].toFixed(1)}<br/>`;
+                        });
+                        return result;
+                    }
+                },
+                legend: {
+                    data: ['温度', '湿度', 'CO2', 'PM2.5', '噪音'],
+                    top: '40px'
+                },
+                grid: {
+                    top: '80px',
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'time',
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '温度/湿度',
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed'
+                            }
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: 'CO2/PM2.5/噪音',
+                        splitLine: {
+                            show: false
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '温度',
+                        type: 'line',
+                        data: [[data.timestamp * 1000, data.temperature]],
+                        yAxisIndex: 0,
+                        showSymbol: false,
+                        smooth: true
+                    },
+                    {
+                        name: '湿度',
+                        type: 'line',
+                        data: [[data.timestamp * 1000, data.humidity]],
+                        yAxisIndex: 0,
+                        showSymbol: false,
+                        smooth: true
+                    },
+                    {
+                        name: 'CO2',
+                        type: 'line',
+                        data: [[data.timestamp * 1000, data.co2]],
+                        yAxisIndex: 1,
+                        showSymbol: false,
+                        smooth: true
+                    },
+                    {
+                        name: 'PM2.5',
+                        type: 'line',
+                        data: [[data.timestamp * 1000, data.pm25]],
+                        yAxisIndex: 1,
+                        showSymbol: false,
+                        smooth: true
+                    },
+                    {
+                        name: '噪音',
+                        type: 'line',
+                        data: [[data.timestamp * 1000, data.noise]],
+                        yAxisIndex: 1,
+                        showSymbol: false,
+                        smooth: true
+                    }
+                ]
+            };
+            chart.setOption(option);
+            return chart;
+        }
+
+        const deviceCharts = new Map();
+        let lastUpdate = 0;
+        const MIN_UPDATE_INTERVAL = 1000; // 最小更新间隔1秒
+        
+        function updateData() {
+            const now = Date.now();
+            if (now - lastUpdate < MIN_UPDATE_INTERVAL) {
+                return;
+            }
+            lastUpdate = now;
+            
+            statusDiv.innerHTML = '正在获取数据...';
+            fetch(`http://${window.location.hostname}:8080/api/data/realtime`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Cache-Control': 'no-cache'
+                },
+                mode: 'cors',
+                credentials: 'omit'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(response => {
+                    if (!response || response.data.length === 0) {
+                        statusDiv.innerHTML = '暂无设备数据';
+                        return;
+                    }
+                    
+                    updateDeviceList(response.data);
+                    
+                    // 如果有选中的设备，只更新实时数据部分
+                    if (selectedDeviceId) {
+                        const selectedDevice = response.data.find(d => d.device_id === selectedDeviceId);
+                        if (selectedDevice) {
+                            updateDeviceRealTimeData(selectedDevice);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    statusDiv.innerHTML = `获取数据失败: ${error.message}`;
+                });
+        }
+
+        // 新增函数：只更新实时数据部分
+        function updateDeviceRealTimeData(device) {
+            // 更新设备状态
+            const statusSpan = document.querySelector(`#deviceDetail .status`);
+            if (statusSpan) {
+                const status = device.device_status === 1 ? 'online' : 'offline';
+                const statusText = status === 'online' ? '在线' : '离线';
+                statusSpan.className = `status status-${status}`;
+                statusSpan.textContent = statusText;
+            }
+            
+            // 更新综合评分
+            const overallScoreElement = document.querySelector('#deviceDetail .score-circle');
+            if (overallScoreElement) {
+                overallScoreElement.style.background = getScoreColor(device.scores.overall);
+                overallScoreElement.textContent = Math.round(device.scores.overall);
+            }
+            
+            // 更新各项指标数据
+            const metrics = ['temperature', 'humidity', 'co2', 'pm25', 'noise', 'light'];
+            metrics.forEach(metric => {
+                const valueElement = document.querySelector(`#deviceDetail .metric-value[data-metric="${metric}"]`);
+                const scoreElement = document.querySelector(`#deviceDetail .metric-score[data-metric="${metric}"]`);
+                const statusElement = document.querySelector(`#deviceDetail .metric-status[data-metric="${metric}"]`);
+                
+                if (valueElement) {
+                    let unit = '';
+                    switch(metric) {
+                        case 'temperature': unit = '°C'; break;
+                        case 'humidity': unit = '%'; break;
+                        case 'co2': unit = 'ppm'; break;
+                        case 'pm25': unit = 'μg/m³'; break;
+                        case 'noise': unit = 'dB'; break;
+                        case 'light': unit = 'lux'; break;
+                    }
+                    valueElement.textContent = `${device[metric].toFixed(1)}${unit}`;
+                }
+                if (scoreElement) {
+                    scoreElement.textContent = Math.round(device.scores[metric]);
+                    scoreElement.className = `metric-score ${getScoreClass(device.scores[metric])}`;
+                }
+                if (statusElement) {
+                    statusElement.textContent = device.status[metric];
+                }
+            });
+            
+            // 更新建议
+            const suggestionsContainer = document.querySelector(`#deviceDetail .suggestions`);
+            if (suggestionsContainer) {
+                const suggestionsHtml = device.suggestions.map(suggestion => 
+                    `<div class="suggestion-item">${suggestion}</div>`
+                ).join('');
+                suggestionsContainer.innerHTML = `
+                    <h3>环境建议</h3>
+                    ${suggestionsHtml}
+                `;
+            }
+        }
+
+        // 初始更新
+        updateData();
+        // 使用 requestAnimationFrame 进行更新
+        function update() {
+            updateData();
+            requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+
+        // 处理窗口大小变化
+        window.addEventListener('resize', () => {
+            deviceCharts.forEach(chart => chart.resize());
+        });
+
+        function getScoreClass(score) {
+            if (score >= 90) return 'score-good';
+            if (score >= 60) return 'score-warning';
+            return 'score-bad';
+        }
+
+        function getAreaTypeText(type) {
+            // type 现在是数字: 0 = LIVING, 1 = TEACHING, 2 = RECREATION
+            switch(type) {
+                case 0: return '生活区';
+                case 1: return '教学区';
+                case 2: return '娱乐区';
+                default: return type;
+            }
+        }
+
+        // 新增函数：根据区域类型数字返回对应的 CSS 类名
+        function getAreaTypeClass(type) {
+            switch(type) {
+                case 0: return 'living';
+                case 1: return 'teaching';
+                case 2: return 'recreation';
+                default: return 'living';  // 默认值
+            }
+        }
+
+        let selectedDeviceId = null;
+        
+        function createDeviceListItem(device) {
+            const item = document.createElement('div');
+            item.className = `device-item ${selectedDeviceId === device.device_id ? 'active' : ''}`;
+            
+            const status = device.device_status === 1 ? 'online' : 'offline';
+            const statusText = status === 'online' ? '在线' : '离线';
+            
+            item.innerHTML = `
+                <div>设备 ${device.device_id}</div>
+                <div>
+                    ${device.area} 
+                    <span class="area-type ${getAreaTypeClass(device.area_type)}">
+                        ${getAreaTypeText(device.area_type)}
+                    </span>
+                    <span class="status status-${status}">${statusText}</span>
+                </div>
+            `;
+            
+            item.onclick = () => {
+                selectedDeviceId = device.device_id;
+                updateDeviceDetail(device.device_id);
+                document.querySelectorAll('.device-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                item.classList.add('active');
+            };
+            
+            return item;
+        }
+        
+        function updateDeviceList(devices) {
+            const container = document.getElementById('deviceList');
+            const fragment = document.createDocumentFragment();
+            
+            devices.forEach(device => {
+                fragment.appendChild(createDeviceListItem(device));
+            });
+            
+            container.innerHTML = '';
+            container.appendChild(fragment);
+        }
+        
+        function updateDeviceDetail(deviceId) {
+            const container = document.getElementById('deviceDetail');
+            container.innerHTML = '<div>加载中...</div>';
+            
+            console.log(`Fetching device details for ${deviceId}`);
+            fetch(`http://${window.location.hostname}:8080/api/device/${deviceId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Received device data:', data);
+                    if (!data || !data.data || data.data.length === 0) {
+                        container.innerHTML = '<div>暂无设备数据</div>';
+                        return;
+                    }
+                    const device = data.data[0];
+                    container.innerHTML = '';
+                    container.appendChild(createDeviceCard(device));
+                })
+                .catch(error => {
+                    console.error('Error fetching device details:', error);
+                    container.innerHTML = `<div>获取设备数据失败: ${error.message}</div>`;
+                });
+        }
+        
+        let activeHistoryChart = null;
+        
+        function toggleHistory(deviceId) {
+            const historySection = document.getElementById(`history_section_${deviceId}`);
+            const toggleButton = document.querySelector(`#deviceDetail button.history-toggle`);
+            
+            if (historySection.classList.contains('visible')) {
+                historySection.classList.remove('visible');
+                toggleButton.textContent = '查看历史数据';
+                toggleButton.classList.remove('active');
+                
+                // 清理图表
+                if (activeHistoryChart) {
+                    activeHistoryChart.dispose();
+                    activeHistoryChart = null;
+                }
+            } else {
+                historySection.classList.add('visible');
+                toggleButton.textContent = '关闭历史数据';
+                toggleButton.classList.add('active');
+                
+                // 延迟一帧再加载数据，确保容器已经显示
+                requestAnimationFrame(() => {
+                    loadHistoryData(deviceId, 'realtime');
+                });
+            }
+        }
+        
+        function initHistoryChart(chartDiv, data, dataType) {
+            if (!data || data.length === 0) {
+                console.error('No data provided for chart initialization');
+                return null;
+            }
+            
+            console.log(`Initializing ${dataType} chart with ${data.length} data points`);
+            const chart = echarts.init(chartDiv);
+            
+            // 验证数据格式
+            console.log('Sample data point:', data[0]);
+            
+            const option = {
+                title: {
+                    text: dataType === 'realtime' ? '24小时实时数据' :
+                          dataType === 'hourly' ? '7天小时聚合数据' : '30天每日聚合数据'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params) {
+                        const date = new Date(params[0].value[0]);
+                        let timeStr;
+                        if (dataType === 'realtime') {
+                            timeStr = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')} ` +
+                                     `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+                        } else if (dataType === 'hourly') {
+                            timeStr = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')} ` +
+                                     `${date.getHours().toString().padStart(2,'0')}:00`;
+                        } else {
+                            timeStr = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2,'0')}-${date.getDate().toString().padStart(2,'0')}`;
+                        }
+                        let result = timeStr + '<br/>';
+                        params.forEach(param => {
+                            result += param.marker + param.seriesName + ': ' + param.value[1] + '<br/>';
+                        });
+                        return result;
+                    }
+                },
+                legend: {
+                    data: ['温度', '湿度', 'CO2', 'PM2.5', '噪音', '光照'],
+                    top: 30
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'time',
+                    axisLabel: {
+                        formatter: function(value) {
+                            const date = new Date(value);
+                            if (dataType === 'realtime') {
+                                return `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+                            } else if (dataType === 'hourly') {
+                                return `${date.getDate()}日${date.getHours()}时`;
+                            } else {
+                                return `${(date.getMonth()+1)}月${date.getDate()}日`;
+                            }
+                        }
+                    },
+                    splitNumber: dataType === 'realtime' ? 24 * 60 : (dataType === 'hourly' ? 24 : 30),
+                    minInterval: dataType === 'realtime' ? 60 * 1000 : (dataType === 'hourly' ? 3600 * 1000 : 24 * 3600 * 1000),
+                    maxInterval: dataType === 'realtime' ? 60 * 1000 : (dataType === 'hourly' ? 3600 * 1000 : 24 * 3600 * 1000),
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            color: '#eee'
+                        }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '温度/湿度',
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: '#eee'
+                            }
+                        },
+                        axisLabel: {
+                            formatter: '{value}°C/%'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: '其他指标',
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'dashed',
+                                color: '#eee'
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '温度',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: { width: 2 },
+                        itemStyle: { color: '#ff4d4f' },
+                        data: data.map(item => {
+                            console.log('Temperature data point:', item.timestamp, item.temperature);
+                            return [item.timestamp * 1000, item.temperature];
+                        })
+                    },
+                    {
+                        name: '湿度',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: { width: 2 },
+                        itemStyle: { color: '#1890ff' },
+                        data: data.map(item => [item.timestamp * 1000, item.humidity])
+                    },
+                    {
+                        name: 'CO2',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: { width: 2 },
+                        itemStyle: { color: '#52c41a' },
+                        data: data.map(item => [item.timestamp * 1000, item.co2])
+                    },
+                    {
+                        name: 'PM2.5',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: { width: 2 },
+                        itemStyle: { color: '#722ed1' },
+                        data: data.map(item => [item.timestamp * 1000, item.pm25])
+                    },
+                    {
+                        name: '噪音',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: { width: 2 },
+                        itemStyle: { color: '#faad14' },
+                        data: data.map(item => [item.timestamp * 1000, item.noise])
+                    },
+                    {
+                        name: '光照',
+                        type: 'line',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: { width: 2 },
+                        itemStyle: { color: '#fa8c16' },
+                        data: data.map(item => [item.timestamp * 1000, item.light])
+                    }
+                ],
+                dataZoom: [{
+                    type: 'inside',
+                    start: dataType === 'realtime' ? 80 : 0,  // 实时数据默认显示最近20%
+                    end: 100
+                }, {
+                    type: 'slider',
+                    start: dataType === 'realtime' ? 80 : 0,
+                    end: 100
+                }]
+            };
+            
+            try {
+                chart.setOption(option);
+                console.log('Chart initialized successfully');
+            } catch (error) {
+                console.error('Error initializing chart:', error);
+            }
+            
+            return chart;
+        }
+
+        function initDatePicker(deviceId) {
+            const picker = flatpickr(`#date_range_${deviceId}`, {
+                mode: "range",
+                locale: "zh",
+                maxDate: "now",  // 允许选择到当前时间
+                dateFormat: "Y-m-d H:i",
+                enableTime: true,
+                time_24hr: true,
+                defaultHour: new Date().getHours(),
+                defaultMinute: new Date().getMinutes(),
+                onChange: function(selectedDates) {
+                    if (selectedDates.length === 2) {
+                        const startTime = Math.floor(selectedDates[0].getTime() / 1000);
+                        loadHistoryData(deviceId, startTime);  // 不传入结束时间，使用当前时间
+                        
+                        // 清除快速选择按钮的激活状态
+                        document.querySelectorAll('.quick-select button').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                    }
+                }
+            });
+            return picker;
+        }
+
+        function setTimeRange(deviceId, range) {
+            const now = Math.floor(Date.now() / 1000);
+            let startTime;
+            
+            switch (range) {
+                case 'last24h':
+                    startTime = now - 24 * 3600;
+                    break;
+                case 'last7d':
+                    startTime = now - 7 * 24 * 3600;
+                    break;
+                case 'last30d':
+                    startTime = now - 30 * 24 * 3600;
+                    break;
+            }
+            
+            // 更新日期选择器
+            const picker = document.getElementById(`date_range_${deviceId}`);
+            if (picker._flatpickr) {
+                picker._flatpickr.setDate([new Date(startTime * 1000), new Date()]);
+            }
+            
+            // 更新按钮状态
+            const buttons = picker.parentElement.querySelectorAll('.quick-select button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.onclick.toString().includes(range)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            loadHistoryData(deviceId, startTime);  // 不传入结束时间，使用当前时间
+        }
+
+        function loadHistoryData(deviceId, dataType) {
+            const chartContainer = document.getElementById(`history_${deviceId}`);
+            if (!chartContainer) {
+                return;
+            }
+            
+            // 如果已经在加载数据，则忽略新的请求
+            if (chartContainer.dataset.loading === 'true') {
+                console.log('Already loading data, ignoring new request');
+                return;
+            }
+            
+            // 清理旧的图表实例
+            if (activeHistoryChart) {
+                try {
+                    activeHistoryChart.dispose();
+                } catch (error) {
+                    console.warn('Error disposing old chart:', error);
+                }
+                activeHistoryChart = null;
+            }
+            
+            // 清空容器内容
+            while (chartContainer.firstChild) {
+                chartContainer.removeChild(chartContainer.firstChild);
+            }
+            
+            // 显示加载提示
+            chartContainer.innerHTML = '<div style="text-align: center; padding: 20px;">加载中...</div>';
+            chartContainer.dataset.loading = 'true';
+            
+            // 计算时间范围
+            const now = Math.floor(new Date().getTime() / 1000);
+            let startTime;
+            
+            if (dataType === 'realtime') {
+                startTime = now - (24 * 60 * 60);  // 最近24小时
+            } else if (dataType === 'hourly') {
+                startTime = now - (7 * 24 * 60 * 60);  // 最近7天
+            } else {
+                startTime = now - (30 * 24 * 60 * 60);  // 最近30天
+            }
+            
+            const url = `http://${window.location.hostname}:8080/api/device/${deviceId}/history`;
+            
+            fetch(url + `?type=${dataType}&start=${startTime}&end=${now}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(historyData => {
+                    if (!historyData || !historyData.data) {
+                        throw new Error('Invalid response format');
+                    }
+                    if (!historyData.data || historyData.data.length === 0) {
+                        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px;">暂无历史数据</div>';
+                        return;
+                    }
+                    
+                    // 确保容器是空的
+                    chartContainer.innerHTML = '';
+                    
+                    activeHistoryChart = initHistoryChart(chartContainer, historyData.data, dataType);
+                    if (activeHistoryChart) {
+                        activeHistoryChart.resize();
+                    } else {
+                        console.error('Failed to create chart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading history data:', error);
+                    chartContainer.innerHTML = `<div style="color: red; text-align: center; padding: 20px;">
+                        加载历史数据失败: ${error.message}
+                    </div>`;
+                })
+                .finally(() => {
+                    // 重置加载状态
+                    chartContainer.dataset.loading = 'false';
+                });
+        }
+
+        // 在切换历史数据类型时更新按钮状态
+        function updateHistoryButtons(deviceId, activeType) {
+            const buttons = document.querySelectorAll(`#history_section_${deviceId} .history-btn`);
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                if (button.onclick.toString().includes(activeType)) {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        // 在切换设备时清理旧的事件监听器
+        function cleanupChartListeners(chartDiv) {
+            if (chartDiv && chartDiv.dataset.resizeHandler) {
+                window.removeEventListener('resize', chartDiv.dataset.resizeHandler);
+                delete chartDiv.dataset.resizeHandler;
+            }
+        }
+
+        // 添加按钮样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .history-buttons {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+            }
+            .history-btn {
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                background-color: #f0f2f5;
+                color: #333;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            .history-btn:hover {
+                background-color: #1890ff;
+                color: white;
+            }
+            .history-btn.active {
+                background-color: #1890ff;
+                color: white;
+            }
+        `;
+        document.head.appendChild(style);
+
+        function getScoreColor(score) {
+            if (score >= 90) return '#52c41a';      // 优-绿色
+            if (score >= 80) return '#1890ff';      // 良-蓝色
+            if (score >= 70) return '#faad14';      // 中-黄色
+            if (score >= 60) return '#fa8c16';      // 差-橙色
+            return '#ff4d4f';                       // 很差-红色
+        }
+    </script>
+</body>
+</html> 

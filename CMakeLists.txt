@@ -25,6 +25,8 @@ add_executable(monitor
     src/database/database.cpp
     src/scoring/environment_scorer.cpp
     src/device/device_manager.cpp
+    src/services/environment_service.cpp
+    src/tasks/data_maintenance.cpp
 )
 
 # 包含目录
@@ -61,10 +63,17 @@ target_link_libraries(device_simulator PRIVATE
 # 为调试版本添加预处理器定义
 target_compile_definitions(monitor PRIVATE
     $<$<CONFIG:Debug>:DEBUG_MODE>
-    $<$<CONFIG:Debug>:BOOST_ASIO_ENABLE_HANDLER_TRACKING>
 )
 
 target_compile_definitions(device_simulator PRIVATE
     $<$<CONFIG:Debug>:DEBUG_MODE>
-    $<$<CONFIG:Debug>:BOOST_ASIO_ENABLE_HANDLER_TRACKING>
 )
+
+# find_package(Boost REQUIRED COMPONENTS system)
+# find_package(MySQL REQUIRED)
+
+# target_link_libraries(monitor
+#     ${Boost_LIBRARIES}
+#     ${MYSQL_LIBRARIES}
+#     jsoncpp
+# )

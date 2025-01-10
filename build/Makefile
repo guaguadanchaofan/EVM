@@ -286,6 +286,54 @@ src/scoring/environment_scorer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/scoring/environment_scorer.cpp.s
 .PHONY : src/scoring/environment_scorer.cpp.s
 
+src/services/environment_service.o: src/services/environment_service.cpp.o
+.PHONY : src/services/environment_service.o
+
+# target to build an object file
+src/services/environment_service.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/services/environment_service.cpp.o
+.PHONY : src/services/environment_service.cpp.o
+
+src/services/environment_service.i: src/services/environment_service.cpp.i
+.PHONY : src/services/environment_service.i
+
+# target to preprocess a source file
+src/services/environment_service.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/services/environment_service.cpp.i
+.PHONY : src/services/environment_service.cpp.i
+
+src/services/environment_service.s: src/services/environment_service.cpp.s
+.PHONY : src/services/environment_service.s
+
+# target to generate assembly for a file
+src/services/environment_service.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/services/environment_service.cpp.s
+.PHONY : src/services/environment_service.cpp.s
+
+src/tasks/data_maintenance.o: src/tasks/data_maintenance.cpp.o
+.PHONY : src/tasks/data_maintenance.o
+
+# target to build an object file
+src/tasks/data_maintenance.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.o
+.PHONY : src/tasks/data_maintenance.cpp.o
+
+src/tasks/data_maintenance.i: src/tasks/data_maintenance.cpp.i
+.PHONY : src/tasks/data_maintenance.i
+
+# target to preprocess a source file
+src/tasks/data_maintenance.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.i
+.PHONY : src/tasks/data_maintenance.cpp.i
+
+src/tasks/data_maintenance.s: src/tasks/data_maintenance.cpp.s
+.PHONY : src/tasks/data_maintenance.s
+
+# target to generate assembly for a file
+src/tasks/data_maintenance.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitor.dir/build.make CMakeFiles/monitor.dir/src/tasks/data_maintenance.cpp.s
+.PHONY : src/tasks/data_maintenance.cpp.s
+
 tools/device_simulator.o: tools/device_simulator.cpp.o
 .PHONY : tools/device_simulator.o
 
@@ -338,6 +386,12 @@ help:
 	@echo "... src/scoring/environment_scorer.o"
 	@echo "... src/scoring/environment_scorer.i"
 	@echo "... src/scoring/environment_scorer.s"
+	@echo "... src/services/environment_service.o"
+	@echo "... src/services/environment_service.i"
+	@echo "... src/services/environment_service.s"
+	@echo "... src/tasks/data_maintenance.o"
+	@echo "... src/tasks/data_maintenance.i"
+	@echo "... src/tasks/data_maintenance.s"
 	@echo "... tools/device_simulator.o"
 	@echo "... tools/device_simulator.i"
 	@echo "... tools/device_simulator.s"
